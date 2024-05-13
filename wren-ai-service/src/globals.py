@@ -28,14 +28,23 @@ from src.pipelines.ask_details import (
 )
 from src.pipelines.ask_details.components.prompts import ask_details_system_prompt
 from src.pipelines.semantics import description
+from src.pipelines.sql_explanation import (
+    generation_pipeline as sql_explanation_generation_pipeline,
+)
+from src.pipelines.sql_explanation.components.prompts import (
+    sql_explanation_system_prompt,
+)
 from src.utils import init_providers
 from src.web.v1.services.ask import AskService
 from src.web.v1.services.ask_details import AskDetailsService
 from src.web.v1.services.semantics import SemanticsService
+from src.web.v1.services.sql_explanation import SQLExplanationService
 
 SEMANTIC_SERVICE = None
 ASK_SERVICE = None
 ASK_DETAILS_SERVICE = None
+SQL_EXPLANATION_SERVICE = None
+SQL_EXPLANATION_SERVICE = None
 
 
 def init_globals(
@@ -43,7 +52,7 @@ def init_globals(
         [], Tuple[LLMProvider, DocumentStoreProvider]
     ] = init_providers,
 ):
-    global SEMANTIC_SERVICE, ASK_SERVICE, ASK_DETAILS_SERVICE
+    global SEMANTIC_SERVICE, ASK_SERVICE, ASK_DETAILS_SERVICE, SQL_EXPLANATION_SERVICE
 
     llm_provider, document_store_provider = init_providers()
     ddl_store = document_store_provider.get_store()
@@ -100,8 +109,17 @@ def init_globals(
         pipelines={
             "generation": ask_details_generation_pipeline.Generation(
                 generator=llm_provider.get_generator(
-                    system_prompt=ask_details_system_prompt
+                    system_prompt=ask_details_system_prompt,
                 )
             ),
+        }
+    )
+    SQL_EXPLANATION_SERVICE = SQLExplanationService(
+        pipelines={
+            "generation": sql_explanation_generation_pipeline.Generation(
+                generator=llm_provider.get_generator(
+                    system_prompt=sql_explanation_system_prompt,
+                ),
+            )
         }
     )
