@@ -39,12 +39,13 @@ from src.web.v1.services.ask import AskService
 from src.web.v1.services.ask_details import AskDetailsService
 from src.web.v1.services.semantics import SemanticsService
 from src.web.v1.services.sql_explanation import SQLExplanationService
+from src.web.v1.services.sql_regeneration import SQLRegenerationService
 
 SEMANTIC_SERVICE = None
 ASK_SERVICE = None
 ASK_DETAILS_SERVICE = None
 SQL_EXPLANATION_SERVICE = None
-SQL_EXPLANATION_SERVICE = None
+SQL_REGENERATION_SERVICE = None
 
 
 def init_globals(
@@ -52,7 +53,12 @@ def init_globals(
         [], Tuple[LLMProvider, DocumentStoreProvider]
     ] = init_providers,
 ):
-    global SEMANTIC_SERVICE, ASK_SERVICE, ASK_DETAILS_SERVICE, SQL_EXPLANATION_SERVICE
+    global \
+        SEMANTIC_SERVICE, \
+        ASK_SERVICE, \
+        ASK_DETAILS_SERVICE, \
+        SQL_EXPLANATION_SERVICE, \
+        SQL_REGENERATION_SERVICE
 
     llm_provider, document_store_provider = init_providers()
     ddl_store = document_store_provider.get_store()
@@ -123,3 +129,5 @@ def init_globals(
             )
         }
     )
+
+    SQL_REGENERATION_SERVICE = SQLRegenerationService(pipelines={})
