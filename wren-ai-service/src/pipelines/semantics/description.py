@@ -90,7 +90,7 @@ class Generation(BasicPipeline):
                     "text": f"model: {model}, identifier: {identifier}",
                 },
             },
-            include_outputs_from=include_outputs_from,
+            include_outputs_from=set(include_outputs_from),
         )
 
 

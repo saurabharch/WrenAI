@@ -130,7 +130,7 @@ class Generation(BasicPipeline):
                     "sql": sql,
                 },
             },
-            include_outputs_from=include_outputs_from,
+            include_outputs_from=set(include_outputs_from),
         )
 
 

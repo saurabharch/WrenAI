@@ -37,7 +37,7 @@ class Retrieval(BasicPipeline):
                     "text": query,
                 },
             },
-            include_outputs_from=include_outputs_from,
+            include_outputs_from=set(include_outputs_from),
         )
 
 
