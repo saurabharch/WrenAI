@@ -94,7 +94,9 @@ class QueryUnderstanding(BasicPipeline):
                     "query": query,
                 },
             },
-            include_outputs_from=set(include_outputs_from),
+            include_outputs_from=(
+                set(include_outputs_from) if include_outputs_from else None
+            ),
         )
 
 

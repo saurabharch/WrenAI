@@ -348,7 +348,9 @@ class Indexing(BasicPipeline):
     ) -> Dict[str, Any]:
         return self._pipeline.run(
             {"cleaner": {"mdl": mdl_str}},
-            include_outputs_from=set(include_outputs_from),
+            include_outputs_from=(
+                set(include_outputs_from) if include_outputs_from else None
+            ),
         )
 
 

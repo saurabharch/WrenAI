@@ -92,7 +92,9 @@ class SQLCorrection(BasicPipeline):
                     "alert": TEXT_TO_SQL_RULES,
                 },
             },
-            include_outputs_from=set(include_outputs_from),
+            include_outputs_from=(
+                set(include_outputs_from) if include_outputs_from else None
+            ),
         )
 
 
