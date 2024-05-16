@@ -301,10 +301,10 @@ class DDLConverter:
 
 class Indexing(BasicPipeline):
     def __init__(
-        self, llm_provider: LLMProvider, store_provider: DocumentStoreProvider
+        self, llm_provider: LLMProvider, document_store_provider: DocumentStoreProvider
     ) -> None:
-        ddl_store = store_provider.get_store()
-        view_store = store_provider.get_store(dataset_name="view_questions")
+        ddl_store = document_store_provider.get_store()
+        view_store = document_store_provider.get_store(dataset_name="view_questions")
 
         pipe = Pipeline()
         pipe.add_component("validator", MDLValidator())

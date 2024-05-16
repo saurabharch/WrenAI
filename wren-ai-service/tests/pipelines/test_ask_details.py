@@ -8,7 +8,7 @@ from src.web.v1.services.ask_details import (
 def test_generation_pipeline_producing_executable_sqls():
     llm_provider, _ = init_providers()
     generation_pipeline = Generation(
-        generator=llm_provider.get_generator(),
+        llm_provider=llm_provider,
     )
 
     candidate_sql_queries = [

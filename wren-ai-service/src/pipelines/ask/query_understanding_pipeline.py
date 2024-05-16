@@ -1,8 +1,8 @@
 import logging
-from typing import Any
 
 from haystack import Pipeline
 
+from src.core.llm_provider import LLMProvider
 from src.core.pipeline import BasicPipeline
 from src.pipelines.ask.components.post_processors import (
     init_query_understanding_post_processor,
@@ -16,7 +16,7 @@ logger = logging.getLogger("wren-ai-service")
 class QueryUnderstanding(BasicPipeline):
     def __init__(
         self,
-        generator: Any,
+        llm_provider: LLMProvider,
     ):
         self._pipeline = Pipeline()
         self._pipeline.add_component(
@@ -25,7 +25,7 @@ class QueryUnderstanding(BasicPipeline):
         )
         self._pipeline.add_component(
             "query_preprocessor",
-            generator,
+            llm_provider.get_generator(),
         )
         self._pipeline.add_component(
             "post_processor",
@@ -56,7 +56,7 @@ class QueryUnderstanding(BasicPipeline):
 if __name__ == "__main__":
     llm_provider, _ = init_providers()
     query_understanding_pipeline = QueryUnderstanding(
-        generator=llm_provider.get_generator(),
+        llm_provider=llm_provider,
     )
 
     print("generating query_understanding_pipeline.jpg to outputs/pipelines/ask...")
