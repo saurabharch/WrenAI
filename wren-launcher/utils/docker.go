@@ -37,9 +37,9 @@ func replaceEnvFileContent(content string, OpenaiApiKey string, OpenaiGeneration
 	reg := regexp.MustCompile(`OPENAI_API_KEY=sk-(.*)`)
 	str := reg.ReplaceAllString(content, "OPENAI_API_KEY="+OpenaiApiKey)
 
-	// replace OPENAI_GENERATION_MODEL
-	reg = regexp.MustCompile(`OPENAI_GENERATION_MODEL=(.*)`)
-	str = reg.ReplaceAllString(str, "OPENAI_GENERATION_MODEL="+OpenaiGenerationModel)
+	// replace GENERATION_MODEL
+	reg = regexp.MustCompile(`GENERATION_MODEL=(.*)`)
+	str = reg.ReplaceAllString(str, "GENERATION_MODEL="+OpenaiGenerationModel)
 
 	// replace USER_UUID
 	reg = regexp.MustCompile(`USER_UUID=(.*)`)
