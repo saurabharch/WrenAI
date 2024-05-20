@@ -42,18 +42,20 @@ class OpenAILLMProvider(LLMProvider):
     def __init__(
         self,
         api_key: Secret = Secret.from_env_var("OPENAI_API_KEY"),
+        base_url: str = os.getenv("OPENAI_BASE_URL"),
         generation_model: str = os.getenv("OPENAI_GENERATION_MODEL")
         or GENERATION_MODEL_NAME,
     ):
-        def _verify_api_key(api_key: str) -> None:
+        def _verify_api_key(api_key: str, base_url: str) -> None:
             """
             this is a temporary solution to verify that the required environment variables are set
             """
-            OpenAI(api_key=api_key).models.list()
+            OpenAI(api_key=api_key, base_url=base_url).models.list()
 
-        _verify_api_key(api_key.resolve_value())
+        _verify_api_key(api_key.resolve_value(), base_url)
         logger.info(f"Using OpenAI Generation Model: {generation_model}")
         self._api_key = api_key
+        self._base_url = base_url
         self._generation_model = generation_model
 
     def get_generator(
