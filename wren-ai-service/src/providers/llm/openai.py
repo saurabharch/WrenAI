@@ -55,7 +55,8 @@ class OpenAILLMProvider(LLMProvider):
             """
             OpenAI(api_key=api_key, base_url=base_url).models.list()
 
-        _verify_api_key(api_key.resolve_value(), base_url)
+        if base_url == OPENAI_BASE_URL:
+            _verify_api_key(api_key.resolve_value(), base_url)
         logger.info(f"Using OpenAI Generation Model: {generation_model}")
         self._api_key = api_key
         self._base_url = base_url
