@@ -5,8 +5,12 @@ from haystack_integrations.components.retrievers.qdrant import QdrantEmbeddingRe
 from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 
 from src.core.provider import DocumentStoreProvider
-from src.providers.llm.openai import EMBEDDING_MODEL_DIMENSION
 from src.providers.loader import provider
+
+if os.getenv("LLM_PROVIDER") == "ollama":
+    from src.providers.llm.ollama import EMBEDDING_MODEL_DIMENSION
+else:
+    from src.providers.llm.openai import EMBEDDING_MODEL_DIMENSION
 
 
 @provider("qdrant")
@@ -16,7 +20,8 @@ class QdrantProvider(DocumentStoreProvider):
 
     def get_store(
         self,
-        embedding_model_dim: int = EMBEDDING_MODEL_DIMENSION,
+        embedding_model_dim: int = int(os.getenv("EMBEDDING_MODEL_DIMENSION", 0))
+        or EMBEDDING_MODEL_DIMENSION,
         dataset_name: Optional[str] = None,
         recreate_index: bool = False,
     ):
