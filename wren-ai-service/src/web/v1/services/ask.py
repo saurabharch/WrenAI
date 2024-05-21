@@ -274,6 +274,9 @@ class AskService:
                         ),
                     )
                 else:
+                    if len(valid_generation_results) > 3:
+                        valid_generation_results = valid_generation_results[:3]
+
                     self.ask_results[query_id] = AskResultResponse(
                         status="finished",
                         response=[
