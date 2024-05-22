@@ -4,9 +4,8 @@ import orjson
 from haystack import Pipeline
 from haystack.components.builders import PromptBuilder
 
-from src.core.document_store_provider import DocumentStoreProvider
-from src.core.llm_provider import LLMProvider
 from src.core.pipeline import BasicPipeline
+from src.core.provider import DocumentStoreProvider, LLMProvider
 from src.utils import init_providers
 
 _TEMPLATE = """

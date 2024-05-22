@@ -2,18 +2,53 @@ import logging
 from typing import Dict, List
 
 from haystack import Document, Pipeline
+from haystack.components.builders.prompt_builder import PromptBuilder
 
-from src.core.llm_provider import LLMProvider
 from src.core.pipeline import BasicPipeline
+from src.core.provider import LLMProvider
 from src.pipelines.ask.components.post_processors import init_generation_post_processor
 from src.pipelines.ask.components.prompts import (
     TEXT_TO_SQL_RULES,
-    init_sql_correction_prompt_builder,
     text_to_sql_system_prompt,
 )
 from src.utils import init_providers, timer
 
 logger = logging.getLogger("wren-ai-service")
+
+
+sql_correction_user_prompt_template = """
+You are a Trino SQL expert with exceptional logical thinking skills and debugging skills.
+
+### TASK ###
+Now you are given a list of syntactically incorrect Trino SQL queries and related error messages.
+With given database schema, please think step by step to correct these wrong Trino SQL quries.
+
+### DATABASE SCHEMA ###
+{% for document in documents %}
+    {{ document.content }}
+{% endfor %}
+
+### FINAL ANSWER FORMAT ###
+The final answer must be a list of corrected SQL quries and its original corresponding summary in JSON format
+
+{
+    "results": [
+        {"sql": <CORRECTED_SQL_QUERY_STRING_1>, "summary": <ORIGINAL_SUMMARY_STRING_1>},
+        {"sql": <CORRECTED_SQL_QUERY_STRING_2>, "summary": <ORIGINAL_SUMMARY_STRING_2>}
+    ]
+}
+
+{{ alert }}
+
+### QUESTION ###
+{% for invalid_generation_result in invalid_generation_results %}
+    sql: {{ invalid_generation_result.sql }}
+    summary: {{ invalid_generation_result.summary }}
+    error: {{ invalid_generation_result.error }}
+{% endfor %}
+
+Let's think step by step.
+"""
 
 
 class SQLCorrection(BasicPipeline):
@@ -24,7 +59,7 @@ class SQLCorrection(BasicPipeline):
         self._pipeline = Pipeline()
         self._pipeline.add_component(
             "sql_correction_prompt_builder",
-            init_sql_correction_prompt_builder(),
+            PromptBuilder(template=sql_correction_user_prompt_template),
         )
         self._pipeline.add_component(
             "sql_correction_generator",
