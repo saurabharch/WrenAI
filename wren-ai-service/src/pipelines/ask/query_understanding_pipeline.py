@@ -85,6 +85,7 @@ class QueryUnderstanding(BasicPipeline):
     def run(
         self,
         query: str,
+        include_outputs_from: List[str] | None = None,
     ):
         logger.info("Ask QueryUnderstanding pipeline is running...")
         return self._pipeline.run(
@@ -92,7 +93,8 @@ class QueryUnderstanding(BasicPipeline):
                 "query_preprocess_prompt_builder": {
                     "query": query,
                 },
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 

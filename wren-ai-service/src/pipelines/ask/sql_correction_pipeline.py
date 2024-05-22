@@ -81,6 +81,7 @@ class SQLCorrection(BasicPipeline):
         self,
         contexts: List[Document],
         invalid_generation_results: List[Dict[str, str]],
+        include_outputs_from: List[str] | None = None,
     ):
         logger.info("Ask SQLCorrection pipeline is running...")
         return self._pipeline.run(
@@ -90,7 +91,8 @@ class SQLCorrection(BasicPipeline):
                     "documents": contexts,
                     "alert": TEXT_TO_SQL_RULES,
                 },
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 

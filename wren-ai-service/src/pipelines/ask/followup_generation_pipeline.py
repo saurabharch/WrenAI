@@ -95,6 +95,7 @@ class FollowUpGeneration(BasicPipeline):
         query: str,
         contexts: List[Document],
         history: AskRequest.AskResponseDetails,
+        include_outputs_from: List[str] | None = None,
     ):
         logger.info("Ask FollowUpGeneration pipeline is running...")
         return self._pipeline.run(
@@ -105,7 +106,8 @@ class FollowUpGeneration(BasicPipeline):
                     "history": history,
                     "alert": TEXT_TO_SQL_RULES,
                 },
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 

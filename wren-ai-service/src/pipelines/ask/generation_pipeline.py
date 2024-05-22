@@ -109,7 +109,13 @@ class Generation(BasicPipeline):
         super().__init__(self._pipeline)
 
     @timer
-    def run(self, query: str, contexts: List[Document], exclude: List[Dict]):
+    def run(
+        self,
+        query: str,
+        contexts: List[Document],
+        exclude: List[Dict],
+        include_outputs_from: List[str] | None = None,
+    ):
         logger.info("Ask Generation pipeline is running...")
         return self._pipeline.run(
             {
@@ -119,7 +125,8 @@ class Generation(BasicPipeline):
                     "alert": TEXT_TO_SQL_RULES,
                     "exclude": exclude,
                 }
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 

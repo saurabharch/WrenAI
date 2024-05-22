@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from haystack import Pipeline
 
@@ -28,14 +29,15 @@ class Retrieval(BasicPipeline):
         super().__init__(self._pipeline)
 
     @timer
-    def run(self, query: str):
+    def run(self, query: str, include_outputs_from: List[str] | None = None):
         logger.info("Ask Retrieval pipeline is running...")
         return self._pipeline.run(
             {
                 "embedder": {
                     "text": query,
                 },
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 

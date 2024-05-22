@@ -122,14 +122,15 @@ class Generation(BasicPipeline):
 
         super().__init__(self._pipeline)
 
-    def run(self, sql: str):
+    def run(self, sql: str, include_outputs_from: List[str] | None = None):
         logger.info("Ask Details Generation pipeline is running...")
         return self._pipeline.run(
             {
                 "ask_details_prompt_builder": {
                     "sql": sql,
                 },
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 

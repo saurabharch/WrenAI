@@ -1,4 +1,4 @@
-from typing import Any, AnyStr, Dict, Optional
+from typing import Any, AnyStr, Dict, List, Optional
 
 import orjson
 from haystack import Pipeline
@@ -72,7 +72,12 @@ class Generation(BasicPipeline):
         super().__init__(self._pipe)
 
     def run(
-        self, *, mdl: Dict[AnyStr, Any], model: str, identifier: Optional[str] = None
+        self,
+        *,
+        mdl: Dict[AnyStr, Any],
+        model: str,
+        identifier: Optional[str] = None,
+        include_outputs_from: List[str] | None = None,
     ):
         return self._pipe.run(
             {
@@ -84,7 +89,8 @@ class Generation(BasicPipeline):
                 "text_embedder": {
                     "text": f"model: {model}, identifier: {identifier}",
                 },
-            }
+            },
+            include_outputs_from=include_outputs_from,
         )
 
 
